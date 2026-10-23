@@ -3,7 +3,7 @@
 **TwitchCraft** — Fabric-мод для Minecraft 1.21.10 на Java 21, который подключает Twitch-чат к игровому миру. Зрители управляют игрой через команды с префиксом `!` в чате Twitch. Идеально для стримеров.
 
 [![Modrinth](https://img.shields.io/modrinth/bt/twitchcraft?color=0076ff&label=Modrinth)](https://modrinth.com/mod/twitchcraft)
-[![GitHub](https://img.shields.io/github/v/release/Smirty/TwitchCraft?include_prereleases&color=0076ff)](https://github.com/Smirty/TwitchCraft/releases)
+[![Последний релиз](https://img.shields.io/github/v/release/Smirty8181/TwitchMod?label=%D1%80%D0%B5%D0%BB%D0%B8%D0%B7&color=2ea44f)](https://github.com/Smirty8181/TwitchMod/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Minecraft 1.21.10](https://img.shields.io/badge/Minecraft-1.21.10-0076ff?logo=minecraft)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Fabric-0.19.3-0076ff)](https://fabricmc.net/)
