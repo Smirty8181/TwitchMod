@@ -1,0 +1,43 @@
+# Метаданные для публикации на Modrinth
+# Иконка проекта: modrinth/icon.png (загрузи при создании проекта или через CLI)
+
+name = "TwitchCraft"
+version = "1.10.1"
+
+[project]
+name = "TwitchCraft"
+description = """
+TwitchCraft — мод для стримеров: зрители управляют миром через Twitch-чат.
+
+**Возможности:**
+- 50+ команд: !крипер, !tnt, !армия, !метеор и др.
+- Суд чата при смерти: !виноват / !невиновен
+- Мобы-призраки зрителей с ником [Viewer]
+- Boss Bar «Чат vs Стример»
+- Scoreboard с КД, кладбищем, статистикой
+- Хаусмод — все КД отключены (/twitchcraft haus или K → Стрим)
+- DonationAlerts (опционально)
+- /rules — справочник для стримера в игре
+
+**Разработчик:** Smirty
+"""
+license = "MIT"
+icon = "icon.png"
+categories = ["adventure", "utility", "management", "social"]
+client_side = "required"
+server_side = "required"
+
+[[authors]]
+name = "Smirty"
+role = "Developer"
+
+[versions.minecraft]
+versions = ["1.21.10"]
+
+[versions.loaders]
+loaders = ["fabric"]
+
+[dependencies]
+fabric-api = "required"
+cloth-config = "required"
+modmenu = "required"

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "twitchcraft",
+  "version": "${version}",
+  "name": "TwitchCraft",
+  "description": "Twitch-чат управляет Minecraft: мобы, хаос, суд чата, битва «Чат vs Стример». Для стримеров.",
+  "authors": ["Smirty"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/twitchcraft",
+    "sources": "https://github.com/Smirty/TwitchCraft"
+  },
+  "license": "MIT",
+  "icon": "assets/twitchcraft/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["net.twitchcraft.TwitchCraftMod"],
+    "client": ["net.twitchcraft.client.TwitchCraftClient"],
+    "modmenu": ["net.twitchcraft.client.ModMenuIntegration"]
+  },
+  "mixins": [
+    "twitchcraft.mixins.json",
+    "twitchcraft.client.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~1.21.10",
+    "java": ">=21",
+    "fabric-api": "*",
+    "cloth-config": "*",
+    "modmenu": "*"
+  }
+}

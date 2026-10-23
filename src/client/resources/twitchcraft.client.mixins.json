@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.twitchcraft.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "net.twitchcraft.mixin.client.TwitchCraftClientMixinPlugin",
+  "client": [
+    "InGameHudMixin",
+    "PlayerModelMixin",
+    "AvatarRendererMixin",
+    "LivingEntityRendererMixin",
+    "PhysicsEmfCompatMixin",
+    "RagdollDisplayMixin",
+    "KeyboardInputMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

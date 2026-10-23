@@ -1,0 +1,163 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    maven { url = 'https://maven.shedaniel.me/' }
+    maven { url = 'https://maven.terraformersmc.com/releases/' }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+    mavenCentral()
+}
+
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "twitchcraft" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+configurations {
+    twitchBundled {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+def twitchBundledExcludeGroups = [
+        'org.slf4j',
+        'com.google.guava',
+        'com.google.code.gson',
+        'com.mojang',
+        'org.apache.logging.log4j',
+        'commons-logging',
+        'commons-io',
+        'commons-codec',
+        'org.apache.commons',
+        'io.netty',
+        'net.java.dev.jna',
+        'org.lwjgl',
+        'org.ow2.asm',
+        'net.fabricmc',
+        'io.github.llamalad7',
+] as Set
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
+    modImplementation "maven.modrinth:cloth-config:${project.cloth_config_version}+fabric"
+
+    implementation "com.github.twitch4j:twitch4j:${project.twitch4j_version}"
+    twitchBundled "com.github.twitch4j:twitch4j:${project.twitch4j_version}"
+}
+
+afterEvaluate {
+    configurations.twitchBundled.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+        def id = artifact.moduleVersion.id
+        if (twitchBundledExcludeGroups.any { id.group.startsWith(it) }) {
+            return
+        }
+        dependencies.add('include', "${id.group}:${id.name}:${id.version}")
+    }
+}
+
+processResources {
+    inputs.property "version", version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": version
+    }
+}
+
+tasks.register("buildTextures", Exec) {
+    group = "build"
+    description = "Generate PNG textures via tools/build_textures.py"
+    workingDir = layout.projectDirectory.asFile
+    def pyCandidates = [
+            "py",
+            "python",
+            "python3",
+            System.getenv("LOCALAPPDATA") ? "${System.getenv("LOCALAPPDATA")}\\Programs\\Python\\Python312\\python.exe" : null,
+            System.getenv("LOCALAPPDATA") ? "${System.getenv("LOCALAPPDATA")}\\Programs\\Python\\Python311\\python.exe" : null,
+    ].findAll { it != null }
+    def py = pyCandidates.find { cand ->
+        try {
+            def pb = new ProcessBuilder(cand == "py" ? [cand, "-3", "--version"] : [cand, "--version"])
+            pb.redirectErrorStream(true)
+            def p = pb.start()
+            p.waitFor() == 0
+        } catch (Exception ignored) {
+            false
+        }
+    }
+    onlyIf {
+        file("tools/build_textures.py").exists() && py != null
+    }
+    doFirst {
+        if (py == "py") {
+            commandLine "py", "-3", "tools/build_textures.py"
+        } else {
+            commandLine py, "tools/build_textures.py"
+        }
+    }
+}
+
+tasks.named("processResources").configure {
+    dependsOn("buildTextures")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+}
+
+def modrinthStreamMods = file("${System.getProperty('user.home')}/AppData/Roaming/ModrinthApp/profiles/stream/mods")
+
+tasks.register("deployStream") {
+    group = "build"
+    description = "Build and copy JAR into Modrinth profile 'stream'"
+    dependsOn("remapJar")
+    doLast {
+        if (!modrinthStreamMods.exists()) {
+            throw new GradleException("Modrinth mods folder not found: ${modrinthStreamMods}")
+        }
+        def built = tasks.named("remapJar").get().archiveFile.get().asFile
+        modrinthStreamMods.listFiles({ f -> f.name.startsWith("twitchcraft") && f.name.endsWith(".jar") } as FileFilter)?.each { it.delete() }
+        copy {
+            from built
+            into modrinthStreamMods
+        }
+        println "Deployed ${built.name} → ${modrinthStreamMods}"
+    }
+}
