@@ -45,7 +45,7 @@
 1. Установите [Fabric Loader](https://fabricmc.net/install/) (версии 0.19.3+)
 2. Установите [Fabric API](https://modrinth.com/mod/fabric-api) (версии 0.138.4+1.21.10)
 3. Установите [Cloth Config](https://modrinth.com/mod/cloth-config) и [Mod Menu](https://modrinth.com/mod/modmenu)
-4. Скачайте последнюю версию TwitchCraft с [Modrinth](https://modrinth.com/mod/twitchcraft) или [GitHub Releases](https://github.com/Smirty/TwitchCraft/releases)
+4. Скачайте последнюю версию TwitchCraft с [Modrinth](https://modrinth.com/mod/twitchcraft) или [GitHub Releases](https://github.com/Smirty8181/TwitchMod/releases/latest)
 5. Положите JAR-файл в папку `mods/` вашего Minecraft-клиента и сервера
 6. Запустите игру, настройте мод через Mod Menu (клавиша `K`) или команду `/twitchcraft`
 
@@ -67,7 +67,7 @@
 
 ```bash
 # Клонировать репозиторий
-git clone https://github.com/Smirty/TwitchCraft.git
+git clone https://github.com/Smirty8181/TwitchMod.git
 cd TwitchCraft
 
 # Собрать мод
@@ -154,7 +154,7 @@ cd TwitchCraft
 ## Ссылки
 
 - [Modrinth проект](https://modrinth.com/mod/twitchcraft)
-- [GitHub репозиторий](https://github.com/Smirty/TwitchCraft)
+- [GitHub репозиторий](https://github.com/Smirty8181/TwitchMod)
 - [ТЗ (Техническое задание)](TZ.md)
 - [Автор: Smirty](https://github.com/Smirty)
 
